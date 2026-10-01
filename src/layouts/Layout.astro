@@ -1,3 +1,24 @@
+---
+import '../styles/main.css'
+
+interface Props {
+	title?: string;
+	description?: string;
+	canonical?: string;
+	image?: string;
+	type?: 'website' | 'article';
+}
+
+const site = Astro.site ?? 'https://faldirmdhn.my.id';
+const {
+	title = 'Faldi Ramadhan',
+	description = 'Portfolio and projects by Faldi Ramadhan — web developer.',
+	canonical = new URL(Astro.url.pathname, site).toString(),
+	image = '/og-image.png',
+	type = 'website',
+} = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -5,18 +26,45 @@
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+		<title>{title}</title>
+		<meta name="description" content="Faldi Ramadhan — personal portfolio & web developer. Showcases projects, blog posts, and contact information." />
+		<meta name="keywords" content="Faldi Ramadhan, portfolio, web developer, frontend, Astro, JavaScript, TypeScript, CSS, HTML" />
+		<meta name="author" content="Faldi Ramadhan" />
+		<meta name="robots" content="index, follow" />
+		<link rel="canonical" href={canonical} />
+
+		<meta property="og:type" content={type} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:site_name" content="Faldi Ramadhan" />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:image" content={image} />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:creator" content="@faldiramadhan" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={image} />
+
+		<meta name="theme-color" content="#0ea5e9" />
+		<meta name="msapplication-TileColor" content="#0ea5e9" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<script is:inline>
+			(() => {
+				let theme = null;
+				try {
+					theme = localStorage.getItem('theme');
+				} catch {}
+				const isDark = theme ? theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+				document.documentElement.classList.toggle('dark', isDark);
+			})();
+		</script>
 	</head>
-	<body>
+	<body class="w-full bg-white transition-colors dark:bg-[#151515]">
 		<slot />
 	</body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

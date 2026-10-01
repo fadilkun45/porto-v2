@@ -1,0 +1,71 @@
+---
+import { Bars3Icon, MoonIcon, SunIcon, XMarkIcon } from '@heroicons/react/16/solid';
+
+const menus = [
+	{ label: 'Tools', href: '/#tools' },
+	{ label: 'Portfolio', href: '/#portfolio' },
+	{ label: 'Certification', href: '/#certification' },
+	{ label: 'Experience', href: '/#experience' },
+	{ label: 'Blog', href: '/blog' },
+	{ label: 'Contact', href: '/#contact' },
+];
+---
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
+	.logo {
+		font-family: 'Zen Dots', sans-serif;
+		font-weight: 400;
+		font-style: normal;
+	}
+</style>
+
+<nav id="navbar" class="fixed top-0 right-0 left-0 z-1000 flex w-full items-center justify-between bg-[#5476cc] px-8 py-4 text-white transition-all lg:px-[100px] lg:py-6 dark:bg-[#151515]">
+	<a href="/" class="logo text-[20px]">Faldi</a>
+
+	<div class="flex items-center gap-x-4 lg:gap-x-6">
+		<div id="overlay" class="fixed inset-0 hidden bg-black/40 lg:hidden"></div>
+
+		<div id="mobileNav" class="fixed top-0 -right-full bottom-0 z-1001 flex w-4/6 flex-col items-center justify-center gap-y-10 bg-[#5476CC] transition-all duration-300 lg:static lg:w-fit lg:flex-row lg:gap-x-6 lg:gap-y-0 dark:bg-[#151515]">
+			<XMarkIcon id="xMark" className="size-8 cursor-pointer lg:hidden" />
+			{menus.map((menu) => (
+				<a href={menu.href} class="nav-link cursor-pointer text-2xl lg:text-lg dark:hover:text-[#FFC517]">{menu.label}</a>
+			))}
+		</div>
+
+		<button id="themeToggle" type="button" aria-label="Toggle dark mode" class="cursor-pointer rounded-full p-1.5 transition-colors hover:bg-white/10">
+			<MoonIcon className="size-6 dark:hidden" />
+			<SunIcon className="hidden size-6 text-[#FFC517] dark:block" />
+		</button>
+		<Bars3Icon id="bars3" className="size-8 cursor-pointer lg:hidden" />
+	</div>
+</nav>
+
+<script>
+	const overlay = document.getElementById('overlay');
+	const bars3 = document.getElementById('bars3');
+	const xMark = document.getElementById('xMark');
+	const mobileNav = document.getElementById('mobileNav');
+
+	function showNav() {
+		overlay?.classList.remove('hidden');
+		mobileNav?.classList.replace('-right-full', 'right-0');
+	}
+
+	function hideNav() {
+		overlay?.classList.add('hidden');
+		mobileNav?.classList.replace('right-0', '-right-full');
+	}
+
+	bars3?.addEventListener('click', showNav);
+	overlay?.addEventListener('click', hideNav);
+	xMark?.addEventListener('click', hideNav);
+	document.querySelectorAll('.nav-link').forEach((link) => link.addEventListener('click', hideNav));
+
+	document.getElementById('themeToggle')?.addEventListener('click', () => {
+		const isDark = document.documentElement.classList.toggle('dark');
+		try {
+			localStorage.setItem('theme', isDark ? 'dark' : 'light');
+		} catch {}
+	});
+</script>

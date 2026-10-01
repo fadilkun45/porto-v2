@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+* {
+    font-family: "Sora", sans-serif;
+}
+
+.swiper-pagination {
+    position: static !important ;
+    margin-top: 24px ;
+}
+
+.swiper-pagination-bullet.swiper-pagination-bullet-active{
+    background-color: #698DE9 !important ;
+    width: 16px ;
+    height: 8px ;
+    border-radius: 50px ;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 72px;
+}
+
+.dark .swiper-pagination-bullet {
+    background-color: #555555;
+}
+
+.dark .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    background-color: #FFC517 !important;
+}

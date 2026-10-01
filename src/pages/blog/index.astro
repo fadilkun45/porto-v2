@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/navbar.astro';
+import Footer from '../../components/footer.astro';
+import BlogCard from '../../components/blog/blogCard.astro';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout title="Blog — Faldi Ramadhan" description="Tulisan dan catatan Faldi Ramadhan seputar web development.">
+	<Navbar />
+	<main class="px-4 pt-32 pb-16 lg:px-16">
+		<div class="mb-10 text-center">
+			<p class="mb-2 text-sm font-medium tracking-wide text-[#5476CC] uppercase dark:text-[#FFC517]">BLOG</p>
+			<h1 class="text-4xl font-bold text-[#333333] dark:text-white">
+				Thoughts & <span class="text-[#5476CC] dark:text-[#FFC517]">Writings</span>
+			</h1>
+		</div>
+
+		{posts.length > 0 ? (
+			<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+				{posts.map((post) => <BlogCard post={post} />)}
+			</div>
+		) : (
+			<p class="text-center text-gray-500 dark:text-gray-400">Belum ada artikel.</p>
+		)}
+	</main>
+	<Footer />
+</Layout>

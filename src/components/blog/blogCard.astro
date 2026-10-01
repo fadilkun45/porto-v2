@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { title, thumbnail, excerpt, pubDate, readingTime, categories } = post.data;
+const date = pubDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<a href={`/blog/${post.id}`} class="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all hover:-translate-y-1 hover:shadow-lg dark:border-white/10 dark:bg-[#1E1E1E]">
+	<div class="aspect-video overflow-hidden bg-[#EEF1FA] dark:bg-white/5">
+		{thumbnail && <img src={thumbnail} alt={title} loading="lazy" class="size-full object-cover transition-transform duration-300 group-hover:scale-105" />}
+	</div>
+	<div class="flex flex-1 flex-col gap-3 p-6">
+		<p class="text-xs text-gray-500 dark:text-gray-400">{date} · {readingTime} min read</p>
+		<h3 class="line-clamp-2 text-lg font-bold text-[#333333] group-hover:text-[#5476CC] dark:text-white dark:group-hover:text-[#FFC517]">{title}</h3>
+		<p class="line-clamp-3 text-sm text-gray-600 dark:text-gray-300">{excerpt}</p>
+		{categories.length > 0 && (
+			<div class="mt-auto flex flex-wrap gap-2 pt-2">
+				{categories.slice(0, 3).map((tag) => (
+					<span class="rounded-full bg-[#EEF1FA] px-3 py-1 text-xs text-[#5476CC] dark:bg-[#FFC517]/10 dark:text-[#FFC517]">{tag}</span>
+				))}
+			</div>
+		)}
+	</div>
+</a>

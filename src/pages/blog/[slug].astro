@@ -1,0 +1,51 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/navbar.astro';
+import Footer from '../../components/footer.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { title, excerpt, url, thumbnail, pubDate, readingTime, categories } = post.data;
+const { Content } = await render(post);
+const date = pubDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<!-- canonical diarahkan ke Medium supaya tidak dianggap duplicate content oleh mesin pencari -->
+<Layout title={`${title} — Faldi Ramadhan`} description={excerpt} canonical={url} image={thumbnail} type="article">
+	<Navbar />
+	<main class="mx-auto max-w-3xl px-4 pt-32 pb-16">
+		<a href="/blog" class="text-sm text-[#5476CC] hover:underline dark:text-[#FFC517]">← Kembali ke Blog</a>
+
+		<header class="mt-6 mb-10">
+			<h1 class="text-3xl font-bold text-[#333333] md:text-4xl dark:text-white">{title}</h1>
+			<p class="mt-4 text-sm text-gray-500 dark:text-gray-400">{date} · {readingTime} min read</p>
+			{categories.length > 0 && (
+				<div class="mt-4 flex flex-wrap gap-2">
+					{categories.map((tag) => (
+						<span class="rounded-full bg-[#EEF1FA] px-3 py-1 text-xs text-[#5476CC] dark:bg-[#FFC517]/10 dark:text-[#FFC517]">{tag}</span>
+					))}
+				</div>
+			)}
+		</header>
+
+		<article class="prose prose-lg max-w-none dark:prose-invert prose-a:text-[#5476CC] dark:prose-a:text-[#FFC517] prose-img:rounded-xl prose-figcaption:text-center">
+			<Content />
+		</article>
+
+		<div class="mt-12 border-t border-gray-200 pt-6 dark:border-white/10">
+			<a href={url} target="_blank" rel="noopener noreferrer" class="inline-flex rounded-lg bg-[#5476CC] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#4565b8] dark:bg-[#FFC517] dark:text-[#151515] dark:hover:bg-[#e6b115]">
+				Baca & beri clap di Medium ↗
+			</a>
+		</div>
+	</main>
+	<Footer />
+</Layout>
